@@ -11,4 +11,14 @@ public class ZippoTest {
                 .then()
         ;
     }
+
+    @Test
+    public void getTest() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/90210")
+                .then()
+                .statusCode(200)
+        ;
+    }
 }
