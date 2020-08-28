@@ -1,3 +1,4 @@
+import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
@@ -13,7 +14,7 @@ public class ZippoTest {
     }
 
     @Test
-    public void getTest() {
+    public void statusCodeTest() {
         given()
                 .when()
                 .get("http://api.zippopotam.us/us/90210")
@@ -21,4 +22,16 @@ public class ZippoTest {
                 .statusCode(200)
         ;
     }
+
+    @Test
+    public void contentTypeTest() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/90210")
+                .then()
+                .contentType(ContentType.JSON)
+        ;
+    }
+
+
 }
