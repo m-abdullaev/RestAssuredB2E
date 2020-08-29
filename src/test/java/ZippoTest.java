@@ -4,6 +4,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -70,7 +71,7 @@ public class ZippoTest {
                 .get("/us/90210")
                 .then()
                 .log().all() // print out response
-        .spec(responseSpecification)
+                .spec(responseSpecification)
         ;
     }
 
@@ -164,6 +165,19 @@ public class ZippoTest {
                 .log().body()
                 .body("meta.pagination.page", equalTo(page))
         ;
+    }
+
+    @Test
+    public void extractingJsonPath() {
+        String extractedValue = given()
+                .when()
+                .get("/us/90210")
+                .then()
+                .log().body()
+                .extract().path("places[0].'place name'")
+        ;
+        System.out.println(extractedValue);
+        Assert.assertEquals(extractedValue, "Beverly Hills");
     }
 
 }
