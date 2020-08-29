@@ -6,12 +6,12 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ZippoTest {
-    
+
     @BeforeClass
     public void setup() {
         baseURI = "http://api.zippopotam.us";
     }
-    
+
     @Test
     public void test() {
         given()
@@ -110,5 +110,35 @@ public class ZippoTest {
         ;
     }
 
+    @Test
+    public void pathParamTest() {
+        String country = "us";
+        String zipCode = "90210";
+        given()
+                .pathParam("country", country)
+                .pathParam("zipCode", zipCode)
+                .log().uri()
+                .when()
+                .get("/{country}/{zipCode}")
+                .then()
+                .body("places", hasSize(1))
+        ;
+    }
+
+    @Test
+    public void queryParamTest() {
+        String format = "json";
+        int page = 10;
+        given()
+                .param("_format", format)
+                .param("page", page)
+                .log().uri()
+                .when()
+                .get("https://gorest.co.in/public-api/users")
+                .then()
+                .log().body()
+                .body("meta.pagination.page", equalTo(page))
+        ;
+    }
 
 }
