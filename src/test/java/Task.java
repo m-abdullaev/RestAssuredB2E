@@ -18,4 +18,11 @@ public class Task {
      * expect content type json
      * expect title in response body to be "quis ut nam facilis et officia qui"
      * **/
+
+    /** Task 4
+     * create a request to https://jsonplaceholder.typicode.com/todos/2
+     * expect status 200
+     * expect content type json
+     * expect response completed status to be false
+     * **/
 }
