@@ -1,4 +1,7 @@
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -7,9 +10,18 @@ import static org.hamcrest.Matchers.*;
 
 public class ZippoTest {
 
+    private RequestSpecification requestSpecification;
+
     @BeforeClass
     public void setup() {
         baseURI = "http://api.zippopotam.us";
+
+        requestSpecification = new RequestSpecBuilder()
+                .log(LogDetail.ALL)
+                .setAccept(ContentType.JSON)
+                .addHeader("randomHeader", "randomValue")
+                .addQueryParam("page", "1")
+                .build();
     }
 
     @Test
@@ -23,6 +35,7 @@ public class ZippoTest {
     @Test
     public void statusCodeTest() {
         given()
+                .spec(requestSpecification)
                 .when()
                 .get("/us/90210")
                 .then()
@@ -33,6 +46,7 @@ public class ZippoTest {
     @Test
     public void contentTypeTest() {
         given()
+                .spec(requestSpecification)
                 .when()
                 .get("/us/90210")
                 .then()
