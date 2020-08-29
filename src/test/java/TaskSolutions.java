@@ -37,4 +37,16 @@ public class TaskSolutions {
                 .contentType(ContentType.TEXT)
                 .body(equalTo("418 I'm a teapot"));
     }
+
+    @Test
+    public void task3() {
+        given()
+                .when()
+                .get("https://jsonplaceholder.typicode.com/todos/2")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("title", equalTo("quis ut nam facilis et officia qui"))
+        ;
+    }
 }
