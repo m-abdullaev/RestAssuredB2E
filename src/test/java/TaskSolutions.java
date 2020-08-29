@@ -61,4 +61,18 @@ public class TaskSolutions {
                 .body("completed",equalTo(false));
         ;
     }
+
+    @Test
+    public void task5() {
+        given()
+                .when()
+                .get("https://jsonplaceholder.typicode.com/todos")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("title[2]", equalTo("fugiat veniam minus"))
+                .body("userId[2]", equalTo(1))
+        ;
+
+    }
 }
