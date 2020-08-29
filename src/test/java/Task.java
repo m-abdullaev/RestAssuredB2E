@@ -25,4 +25,13 @@ public class Task {
      * expect content type json
      * expect response completed status to be false
      * **/
+
+    /** Task 5
+     * create a request to https://jsonplaceholder.typicode.com/todos
+     * expect status 200
+     * expect content type json
+     * expect third item have:
+     *      title = "fugiat veniam minus"
+     *      userId = 1
+     * **/
 }
