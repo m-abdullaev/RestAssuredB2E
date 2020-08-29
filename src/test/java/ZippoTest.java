@@ -1,10 +1,17 @@
 import io.restassured.http.ContentType;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ZippoTest {
+    
+    @BeforeClass
+    public void setup() {
+        baseURI = "http://api.zippopotam.us";
+    }
+    
     @Test
     public void test() {
         given()
@@ -17,7 +24,7 @@ public class ZippoTest {
     public void statusCodeTest() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .statusCode(200)
         ;
@@ -27,7 +34,7 @@ public class ZippoTest {
     public void contentTypeTest() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .contentType(ContentType.JSON)
         ;
@@ -38,7 +45,7 @@ public class ZippoTest {
         given()
                 .log().all() // print out request
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out response
         ;
@@ -48,7 +55,7 @@ public class ZippoTest {
     public void bodyJsonPathTest() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out response
                 .body("country", equalTo("United States"))
@@ -59,7 +66,7 @@ public class ZippoTest {
     public void bodyJsonPathTest2() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out response
                 .body("places[0].state", equalTo("California"))
@@ -70,7 +77,7 @@ public class ZippoTest {
     public void bodyJsonPathTest3() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out response
                 .body("places[0].'place name'", equalTo("Beverly Hills"))
@@ -81,7 +88,7 @@ public class ZippoTest {
     public void bodyArraySizeTest() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out response
                 .body("places", hasSize(1))
@@ -92,7 +99,7 @@ public class ZippoTest {
     public void chainingTests() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out response
                 .statusCode(200)
