@@ -88,5 +88,20 @@ public class ZippoTest {
         ;
     }
 
+    @Test
+    public void chainingTests() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/90210")
+                .then()
+                .log().all() // print out response
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("places", hasSize(1))
+                .body("places[0].state", equalTo("California"))
+                .body("places[0].'state abbreviation'", equalTo("CA"))
+        ;
+    }
+
 
 }
