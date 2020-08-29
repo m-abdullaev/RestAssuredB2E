@@ -1,7 +1,9 @@
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -11,6 +13,7 @@ import static org.hamcrest.Matchers.*;
 public class ZippoTest {
 
     private RequestSpecification requestSpecification;
+    private ResponseSpecification responseSpecification;
 
     @BeforeClass
     public void setup() {
@@ -21,6 +24,11 @@ public class ZippoTest {
                 .setAccept(ContentType.JSON)
                 .addHeader("randomHeader", "randomValue")
                 .addQueryParam("page", "1")
+                .build();
+
+        responseSpecification = new ResponseSpecBuilder()
+                .expectContentType(ContentType.JSON)
+                .expectStatusCode(200)
                 .build();
     }
 
@@ -62,6 +70,7 @@ public class ZippoTest {
                 .get("/us/90210")
                 .then()
                 .log().all() // print out response
+        .spec(responseSpecification)
         ;
     }
 
@@ -72,6 +81,7 @@ public class ZippoTest {
                 .get("/us/90210")
                 .then()
                 .log().all() // print out response
+                .spec(responseSpecification)
                 .body("country", equalTo("United States"))
         ;
     }
@@ -83,6 +93,7 @@ public class ZippoTest {
                 .get("/us/90210")
                 .then()
                 .log().all() // print out response
+                .spec(responseSpecification)
                 .body("places[0].state", equalTo("California"))
         ;
     }
