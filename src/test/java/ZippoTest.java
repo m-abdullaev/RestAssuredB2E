@@ -207,4 +207,15 @@ public class ZippoTest {
         Assert.assertTrue(extractedValues.contains("Altintepe Mah."));
     }
 
+    @Test
+    public void testingJsonPathArrayNotEmpty() {
+        given()
+                .when()
+                .get("/tr/34840")
+                .then()
+                .log().body()
+                .body("places", not(empty()))
+        ;
+
+    }
 }
