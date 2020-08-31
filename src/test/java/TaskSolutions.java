@@ -1,6 +1,7 @@
 import io.restassured.http.ContentType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pojo.ToDo;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -74,5 +75,17 @@ public class TaskSolutions {
                 .body("userId[2]", equalTo(1))
         ;
 
+    }
+
+    @Test
+    public void convertingIntoPojo() {
+        ToDo toDo = given()
+                .when()
+                .get("https://jsonplaceholder.typicode.com/todos/2")
+                .then()
+                .extract().as(ToDo.class);
+
+        System.out.println(toDo);
+        System.out.println(toDo.getTitle());
     }
 }
