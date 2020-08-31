@@ -88,4 +88,17 @@ public class TaskSolutions {
         System.out.println(toDo);
         System.out.println(toDo.getTitle());
     }
+
+    @Test
+    public void convertingArrayIntoArrayOfPojos() {
+        ToDo[] toDos = given()
+                .when()
+                .get("https://jsonplaceholder.typicode.com/todos")
+                .then()
+                .extract().as(ToDo[].class);
+
+        for (int i = 0; i < toDos.length; i++) {
+            System.out.println(toDos[i]);
+        }
+    }
 }
