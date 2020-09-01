@@ -101,7 +101,21 @@ public class GoRestTests {
         ;
     }
 
-
+    @Test(dependsOnMethods = "createUser")
+    public void updateUserById(){
+        String updateText = "Update User Test";
+        given()
+                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
+                .contentType(ContentType.JSON)
+                .body("{\"name\": \""+updateText+"\"}")
+                .pathParam("userId",userId)
+                .when()
+                .put("https://gorest.co.in/public-api/users/{userId}")
+                .then()
+                .statusCode(200)
+                .body("code", equalTo(200))
+                .body("data.name", equalTo(updateText));
+    }
 
     private String getRandomEmail() {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
