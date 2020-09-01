@@ -16,7 +16,7 @@ public class GoRestTests {
 
     private int userId;
 
-    @Test(enabled = false)
+    @Test()
     public void getUsers() {
         List<User> userList = given()
                 .when()
