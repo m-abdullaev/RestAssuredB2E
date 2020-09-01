@@ -13,7 +13,10 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class GoRestTests {
-    @Test
+
+    private int userId;
+
+    @Test(enabled = false)
     public void getUsers() {
         List<User> userList = given()
                 .when()
@@ -33,7 +36,7 @@ public class GoRestTests {
         }
     }
 
-    @Test
+    @Test(enabled = false)
     public void getUsersExtactingMultipleTimes() {
         ExtractableResponse<Response> extract = given()
                 .when()
@@ -67,7 +70,7 @@ public class GoRestTests {
 
     @Test
     public void createUser() {
-        given()
+        userId = given()
                 // prerequisite data
                 .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
                 .contentType(ContentType.JSON)
@@ -80,6 +83,21 @@ public class GoRestTests {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("code", equalTo(201))
+                .extract().jsonPath().getInt("data.id");
+        ;
+    }
+
+    @Test
+    public void getUserById() {
+        given()
+                .pathParam("userId", userId)
+                .when()
+                .get("https://gorest.co.in/public-api/users/{userId}")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("data.id", equalTo(userId))
         ;
     }
 
