@@ -38,7 +38,6 @@ public class GoRestTests {
                 .when()
                 .get("https://gorest.co.in/public-api/users")
                 .then()
-                .log().body()
                 //assertions
                 .statusCode(200)
                 .contentType(ContentType.JSON)
@@ -47,11 +46,17 @@ public class GoRestTests {
                 //extracting users list
                 .extract();
 
-        List<User> userList = extract.jsonPath().getList("data", User.class);
         int code = extract.jsonPath().getInt("code");
         System.out.println("Code: " + code);
-        for (User user : userList) {
-            System.out.println(user);
+
+//        List<User> userList = extract.jsonPath().getList("data", User.class);
+//        for (User user : userList) {
+//            System.out.println(user);
+//        }
+
+        User[] data = extract.jsonPath().getObject("data", User[].class);
+        for (int i = 0; i < data.length; i++) {
+            System.out.println(data[i]);
         }
     }
 }
