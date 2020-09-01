@@ -117,6 +117,19 @@ public class GoRestTests {
                 .body("data.name", equalTo(updateText));
     }
 
+    @Test(dependsOnMethods = "createUser")
+    public void deleteUserById(){
+        given()
+                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
+                .pathParam("userId",userId)
+                .when()
+                .delete("https://gorest.co.in/public-api/users/{userId}")
+                .then()
+                .statusCode(200)
+                .body("code", equalTo(204))
+        ;
+    }
+
     private String getRandomEmail() {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
     }
