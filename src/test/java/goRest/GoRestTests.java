@@ -63,4 +63,22 @@ public class GoRestTests {
         User user = extract.jsonPath().getObject("data[4]", User.class);
         System.out.println(user);
     }
+
+    @Test
+    public void createUser() {
+        given()
+                // prerequisite data
+                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
+                .contentType(ContentType.JSON)
+                .body("{\"email\":\"Carmine_Koch2@gmail.com\", \"name\": \"Techno\", \"gender\":\"Male\", \"status\": \"Active\"}")
+                .when()
+                //action
+                .post("https://gorest.co.in/public-api/users")
+                .then()
+                //validations
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(201))
+        ;
+    }
 }
