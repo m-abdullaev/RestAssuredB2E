@@ -54,9 +54,13 @@ public class GoRestTests {
 //            System.out.println(user);
 //        }
 
-        User[] data = extract.jsonPath().getObject("data", User[].class);
-        for (int i = 0; i < data.length; i++) {
-            System.out.println(data[i]);
-        }
+//        User[] data = extract.jsonPath().getObject("data", User[].class);
+//        for (int i = 0; i < data.length; i++) {
+//            System.out.println(data[i]);
+//        }
+
+        // extracting certain user only
+        User user = extract.jsonPath().getObject("data[4]", User.class);
+        System.out.println(user);
     }
 }
