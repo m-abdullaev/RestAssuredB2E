@@ -7,6 +7,7 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pojo.Location;
 
 import java.util.List;
 
@@ -176,8 +177,7 @@ public class ZippoTest {
                 .get("/us/90210")
                 .then()
                 .log().body()
-                .extract().path("places[0].'place name'")
-        ;
+                .extract().path("places[0].'place name'");
         System.out.println(extractedValue);
         Assert.assertEquals(extractedValue, "Beverly Hills");
     }
@@ -201,8 +201,7 @@ public class ZippoTest {
                 .get("/tr/34840")
                 .then()
                 .log().body()
-                .extract().path("places.'place name'")
-        ;
+                .extract().path("places.'place name'");
         System.out.println(extractedValues);
         Assert.assertTrue(extractedValues.contains("Altintepe Mah."));
     }
@@ -216,6 +215,17 @@ public class ZippoTest {
                 .log().body()
                 .body("places", not(empty()))
         ;
+    }
 
+    @Test
+    public void extractingJsonAsPojo() {
+        Location location = given()
+                .when()
+                .get("/tr/34840")
+                .then()
+                .log().body()
+                .extract().as(Location.class);
+
+        System.out.println(location);
     }
 }
