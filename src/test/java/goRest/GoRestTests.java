@@ -87,7 +87,7 @@ public class GoRestTests {
         ;
     }
 
-    @Test
+    @Test(dependsOnMethods = "createUser")
     public void getUserById() {
         given()
                 .pathParam("userId", userId)
@@ -100,6 +100,8 @@ public class GoRestTests {
                 .body("data.id", equalTo(userId))
         ;
     }
+
+
 
     private String getRandomEmail() {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
