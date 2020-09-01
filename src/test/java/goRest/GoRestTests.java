@@ -68,7 +68,7 @@ public class GoRestTests {
         System.out.println(user);
     }
 
-    @Test
+    @Test()
     public void createUser() {
         userId = given()
                 // prerequisite data
@@ -117,7 +117,7 @@ public class GoRestTests {
                 .body("data.name", equalTo(updateText));
     }
 
-    @Test(dependsOnMethods = "createUser")
+    @Test(dependsOnMethods = "createUser", priority = 1)
     public void deleteUserById(){
         given()
                 .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
@@ -127,6 +127,19 @@ public class GoRestTests {
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(204))
+        ;
+    }
+
+    @Test(dependsOnMethods = "deleteUserById")
+    public void getUserByIdNegative() {
+        given()
+                .pathParam("userId", userId)
+                .when()
+                .get("https://gorest.co.in/public-api/users/{userId}")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(404))
         ;
     }
 
