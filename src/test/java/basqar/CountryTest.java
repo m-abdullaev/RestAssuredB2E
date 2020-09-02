@@ -128,6 +128,23 @@ public class CountryTest {
     }
 
     @Test(dependsOnMethods = "deleteById")
+    public void searchDeletedCountryNegative() {
+
+        Map<String, String> searchBody = new HashMap<>();
+        searchBody.put("name", randomGenName);
+
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(searchBody)
+                .when()
+                .post("/school-service/api/countries/search")
+                .then()
+                .body(equalTo("[]"))
+        ;
+    }
+
+    @Test(dependsOnMethods = "deleteById")
     public void updateCountryNegative() {
         Country country = new Country();
         country.setId(id);
