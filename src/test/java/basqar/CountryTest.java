@@ -126,4 +126,16 @@ public class CountryTest {
                 .statusCode(404)
                 .body("message", equalTo("Country not found"));
     }
+
+    @Test(dependsOnMethods = "deleteById")
+    public void deleteByIdNegative() {
+        given()
+                .cookies(cookies)
+                .pathParam("countryId", id)
+                .when()
+                .delete("school-service/api/countries/{countryId}")
+                .then()
+                .statusCode(404)
+        ;
+    }
 }
