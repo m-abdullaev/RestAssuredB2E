@@ -1,8 +1,10 @@
 package goRest;
 
 import goRest.model.Posts;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -16,10 +18,18 @@ import static org.hamcrest.Matchers.*;
 public class GoRestPostsTests {
 
     private int postId;
+    private String token;
+    private RequestSpecification requestSpec;
 
     @BeforeClass
     public void init() {
+        token = "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47";
         baseURI = "https://gorest.co.in/public-api/posts";
+
+        requestSpec = new RequestSpecBuilder()
+                .addHeader("Authorization", token)
+                .setContentType(ContentType.JSON)
+                .build();
     }
 
     @Test()
@@ -41,8 +51,7 @@ public class GoRestPostsTests {
     public void createPost() {
         postId = given()
                 // prerequisite data
-                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
-                .contentType(ContentType.JSON)
+                .spec(requestSpec)
                 .body("{\"user_id\":\"" + getRandomUserId() + "\", \"title\": \"Techno\", \"body\":\"Male\"}")
                 .when()
                 //action
@@ -71,8 +80,7 @@ public class GoRestPostsTests {
     public void updatePostById() {
         String updateText = "Update Post Test";
         given()
-                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
-                .contentType(ContentType.JSON)
+                .spec(requestSpec)
                 .body("{\"body\": \"" + updateText + "\"}")
                 .pathParam("postId", postId)
                 .when()
@@ -85,7 +93,7 @@ public class GoRestPostsTests {
     @Test(dependsOnMethods = "createPost", priority = 1)
     public void deletePostById() {
         given()
-                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
+                .spec(requestSpec)
                 .pathParam("postId", postId)
                 .when()
                 .delete("/{postId}")
