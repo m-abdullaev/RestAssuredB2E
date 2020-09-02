@@ -42,6 +42,23 @@ public class CountryTest {
     }
 
     @Test
+    public void searchRandomCountryNegative() {
+
+        Map<String, String> searchBody = new HashMap<>();
+        searchBody.put("name", RandomStringUtils.randomAlphabetic(8));
+
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(searchBody)
+                .when()
+                .post("/school-service/api/countries/search")
+                .then()
+                .body(equalTo("[]"))
+        ;
+    }
+
+    @Test
     public void createCountry() {
         Country country = new Country();
         country.setName(randomGenName);
