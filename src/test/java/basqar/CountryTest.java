@@ -62,6 +62,24 @@ public class CountryTest {
     }
 
     @Test(dependsOnMethods = "createCountry")
+    public void searchCountry() {
+
+        Map<String, String> searchBody = new HashMap<>();
+        searchBody.put("name", randomGenName);
+
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(searchBody)
+                .when()
+                .post("/school-service/api/countries/search")
+                .then()
+                .body(not(empty()))
+                .body("name", hasItem(randomGenName)) // at least one item should contain name = randomGenName
+        ;
+    }
+
+    @Test(dependsOnMethods = "createCountry")
     public void createCountryNegative() {
         Country country = new Country();
         country.setName(randomGenName);
