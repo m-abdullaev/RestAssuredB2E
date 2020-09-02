@@ -1,7 +1,9 @@
 package goRest;
 
 import goRest.model.Posts;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -26,9 +28,7 @@ public class GoRestPostsTests {
                 .when()
                 .get()
                 .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("code", equalTo(200))
+                .spec(getStatusCodeSpec(200))
                 .body("data", not(empty()))
                 .extract().jsonPath().getList("data", Posts.class);
 
@@ -50,9 +50,7 @@ public class GoRestPostsTests {
                 .then()
                 .log().body()
                 //validations
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("code", equalTo(201))
+                .spec(getStatusCodeSpec(201))
                 .extract().jsonPath().getInt("data.id");
         System.out.println(postId);
     }
@@ -64,9 +62,7 @@ public class GoRestPostsTests {
                 .when()
                 .get("/{postId}")
                 .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("code", equalTo(200))
+                .spec(getStatusCodeSpec(200))
                 .body("data.id", equalTo(postId))
         ;
     }
@@ -82,8 +78,7 @@ public class GoRestPostsTests {
                 .when()
                 .put("/{postId}")
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(200))
+                .spec(getStatusCodeSpec(200))
                 .body("data.body", equalTo(updateText));
     }
 
@@ -95,8 +90,7 @@ public class GoRestPostsTests {
                 .when()
                 .delete("/{postId}")
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(204))
+                .spec(getStatusCodeSpec(204))
         ;
     }
 
@@ -107,10 +101,16 @@ public class GoRestPostsTests {
                 .when()
                 .get("/{postId}")
                 .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("code", equalTo(404))
+                .spec(getStatusCodeSpec(404))
         ;
+    }
+
+    private ResponseSpecification getStatusCodeSpec(Integer statusCode){
+        return new ResponseSpecBuilder()
+                .expectStatusCode(200)
+                .expectContentType(ContentType.JSON)
+                .expectBody("code", equalTo(statusCode))
+                .build();
     }
 
     private String getRandomUserId() {
