@@ -75,7 +75,7 @@ public class CountryTest {
                 .post("/school-service/api/countries")
                 .then()
                 .statusCode(400)
-                .body("message", equalTo("The Country with Name \""+randomGenName+"\" already exists."));
+                .body("message", equalTo("The Country with Name \"" + randomGenName + "\" already exists."));
     }
 
     @Test(dependsOnMethods = "createCountry")
@@ -95,6 +95,18 @@ public class CountryTest {
                 .statusCode(200)
                 .body("name", equalTo(country.getName()))
                 .body("code", equalTo(country.getCode()));
+    }
+
+    @Test(dependsOnMethods = "createCountry")
+    public void deleteById() {
+        given()
+                .cookies(cookies)
+                .pathParam("countryId", id)
+                .when()
+                .delete("school-service/api/countries/{countryId}")
+                .then()
+                .statusCode(200)
+        ;
     }
 
 }
