@@ -97,7 +97,7 @@ public class CountryTest {
                 .body("code", equalTo(country.getCode()));
     }
 
-    @Test(dependsOnMethods = "createCountry")
+    @Test(dependsOnMethods = "updateCountry")
     public void deleteById() {
         given()
                 .cookies(cookies)
@@ -109,4 +109,21 @@ public class CountryTest {
         ;
     }
 
+    @Test(dependsOnMethods = "deleteById")
+    public void updateCountryNegative() {
+        Country country = new Country();
+        country.setId(id);
+        country.setName(RandomStringUtils.randomAlphabetic(8));
+        country.setCode(RandomStringUtils.randomAlphabetic(4));
+
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(country)
+                .when()
+                .put("/school-service/api/countries")
+                .then()
+                .statusCode(404)
+                .body("message", equalTo("Country not found"));
+    }
 }
