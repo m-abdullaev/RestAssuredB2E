@@ -11,12 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 public class CountryTest {
 
     private Cookies cookies;
     private String randomGenName;
     private String randomGenCode;
+    private String id;
 
     @BeforeClass
     public void init() {
@@ -26,8 +28,8 @@ public class CountryTest {
         randomGenCode = RandomStringUtils.randomAlphabetic(4);
 
         Map<String, String> credentials = new HashMap<>();
-        credentials.put("username","daulet2030@gmail.com");
-        credentials.put("password","TechnoStudy123@");
+        credentials.put("username", "daulet2030@gmail.com");
+        credentials.put("password", "TechnoStudy123@");
 
         cookies = given()
                 .body(credentials)
@@ -40,7 +42,27 @@ public class CountryTest {
     }
 
     @Test
-    public void createCountry(){
+    public void createCountry() {
+        Country country = new Country();
+        country.setName(randomGenName);
+        country.setCode(randomGenCode);
+
+        id = given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(country)
+                .when()
+                .post("/school-service/api/countries")
+                .then()
+                .statusCode(201)
+                .body("id", not(empty()))
+                .extract().path("id");
+//                .extract().jsonPath().getString("id");
+        System.out.println(id);
+    }
+
+    @Test(dependsOnMethods = "createCountry")
+    public void createCountryNegative() {
         Country country = new Country();
         country.setName(randomGenName);
         country.setCode(randomGenCode);
@@ -52,7 +74,8 @@ public class CountryTest {
                 .when()
                 .post("/school-service/api/countries")
                 .then()
-                .statusCode(201)
-                ;
+                .statusCode(400)
+                .body("message", equalTo("The Country with Name \""+randomGenName+"\" already exists."));
     }
+
 }
