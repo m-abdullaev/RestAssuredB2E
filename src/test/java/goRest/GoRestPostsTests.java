@@ -9,7 +9,9 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static io.restassured.RestAssured.*;
@@ -49,10 +51,15 @@ public class GoRestPostsTests {
 
     @Test()
     public void createPost() {
+        Posts post = new Posts();
+        post.setUser_id(getRandomUserId());
+        post.setTitle("Techno");
+        post.setBody("Male");
+
         postId = given()
                 // prerequisite data
                 .spec(requestSpec)
-                .body("{\"user_id\":\"" + getRandomUserId() + "\", \"title\": \"Techno\", \"body\":\"Male\"}")
+                .body(post)
                 .when()
                 //action
                 .post()
@@ -79,9 +86,12 @@ public class GoRestPostsTests {
     @Test(dependsOnMethods = "createPost")
     public void updatePostById() {
         String updateText = "Update Post Test";
+        Map<String, String> body = new HashMap<>();
+        body.put("body", updateText);
+
         given()
                 .spec(requestSpec)
-                .body("{\"body\": \"" + updateText + "\"}")
+                .body(body)
                 .pathParam("postId", postId)
                 .when()
                 .put("/{postId}")
@@ -121,7 +131,7 @@ public class GoRestPostsTests {
                 .build();
     }
 
-    private String getRandomUserId() {
-        return new Random().nextInt(10) + 1 + "";
+    private Integer getRandomUserId() {
+        return new Random().nextInt(10) + 1;
     }
 }
