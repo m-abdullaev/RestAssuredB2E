@@ -4,7 +4,7 @@
 <suite name="Jenkins default suite">
     <test name="Main test">
         <classes>
-            <class name="TaskSolutions"></class>
+            <class name="basqar.CountryTest"></class>
         </classes>
     </test>
 </suite>

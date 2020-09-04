@@ -127,7 +127,7 @@ public class CountryTest {
                 .when()
                 .put("/school-service/api/countries")
                 .then()
-                .statusCode(405) // TODO: fix this
+                .statusCode(200)
                 .body("name", equalTo(country.getName()))
                 .body("code", equalTo(country.getCode()));
     }
