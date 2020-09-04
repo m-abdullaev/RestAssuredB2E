@@ -39,4 +39,20 @@
             <version>2.10.2</version>
         </dependency>
     </dependencies>
+
+    <!-- tell maven which testng xml to run by default, when running tests -->
+    <build>
+        <plugins>
+            <plugin> <!-- add this plugin to run testng suite xml file when running [mvn clean test]-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile> <!-- the file name to be run by mvn -->
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
